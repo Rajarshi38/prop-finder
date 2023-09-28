@@ -16,12 +16,17 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import styled from "@emotion/styled";
 import { locations, propertyTypes } from "../constants";
 import { css } from "@emotion/react";
+import { fetchAllProperties } from "../service/service";
 
 type PropertySearchValues = {
   location: string;
-  date: Date;
+  date: string;
   propertyType: string;
   priceRange: number[];
+};
+
+const capitalize = (word: string) => {
+  return word[0].toUpperCase() + word.slice(1);
 };
 
 const PropertySearchForm = () => {
@@ -38,8 +43,28 @@ const PropertySearchForm = () => {
   const startingPrice = priceRange[0] * 600;
   const endPrice = priceRange[1] * 600;
 
-  const onSubmit: SubmitHandler<PropertySearchValues> = (values) => {
-    console.log(values);
+  const onSubmit: SubmitHandler<PropertySearchValues> = async (values) => {
+    const { location, priceRange, propertyType, date } = values;
+    const [priceStart, priceEnd] = priceRange;
+    const map = new Map();
+    if (location) {
+      map.set("location", capitalize(location));
+    }
+    if (priceStart) {
+      map.set("priceStart", priceStart);
+    }
+    if (priceEnd) {
+      map.set("priceENd", priceEnd);
+    }
+    if (propertyType) {
+      map.set("type", propertyType.toLowerCase());
+    }
+    if (date) {
+      map.set("availableDate", date);
+    }
+
+    const queryParams = Object.fromEntries(map);
+    await fetchAllProperties(queryParams);
   };
 
   return (

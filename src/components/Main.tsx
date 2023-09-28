@@ -5,7 +5,7 @@ import PropertyLists from "./PropertyLists";
 const Main = () => {
   return (
     <main className="main">
-      <Flex direction="column" my="16" gap="6">
+      <Flex direction="column" gap="6">
         <Box>
           <Heading as="h2" size="lg">
             Search Properties for Rent
@@ -14,7 +14,7 @@ const Main = () => {
         <Box>
           <PropertySearchForm />
         </Box>
-        <Box>
+        <Box mb="5" mt="18">
           <PropertyLists />
         </Box>
       </Flex>

@@ -15,19 +15,20 @@ const PropertyLists = () => {
   }, []);
 
   return (
-    <div>
+    <>
       <SimpleGrid
         columns={{
           base: 1,
           md: 2,
           lg: 3,
         }}
+        spacing={4}
       >
         {properties.map((property) => {
           return <PropertyCard key={property._id} property={property} />;
         })}
       </SimpleGrid>
-    </div>
+    </>
   );
 };
 

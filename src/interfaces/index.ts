@@ -4,14 +4,14 @@ export interface ModalProps {
   heading: React.ReactNode | string;
 }
 
-type PropertyType =
+export type PropertyType =
   | "residential"
   | "commercial"
   | "industrial"
   | "raw land"
   | "special use";
 
-type RentType = "per-month" | "per-year";
+export type RentType = "per-month" | "per-year";
 export interface Property {
   _id: string;
   propertyName: string;
@@ -24,4 +24,10 @@ export interface Property {
   length: number;
   breadth: number;
   propertyImage?: string;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
 }

@@ -1,5 +1,8 @@
 import { Button, Flex, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useSetAtom } from "jotai";
+import userAtom from "../store/userAtom";
+import { loginUser } from "../service/service";
 
 type LoginFormValues = {
   email: string;
@@ -13,8 +16,12 @@ const LoginForm = () => {
     formState: { errors },
   } = useForm<LoginFormValues>();
 
-  const onSubmit: SubmitHandler<LoginFormValues> = (data) => {
-    console.log(data);
+  const setUser = useSetAtom(userAtom);
+
+  const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
+    const { email, password } = data;
+    const user = await loginUser({ email, password });
+    setUser(user);
   };
 
   return (
