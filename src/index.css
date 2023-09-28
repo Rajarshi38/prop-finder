@@ -4,3 +4,16 @@ html {
 .main {
   color: white;
 }
+
+input::-webkit-calendar-picker-indicator {
+  bg: "rgba(0,0,0,0)",
+  bottom: 0,
+  color: "rgba(0,0,0,0)",
+  cursor: "pointer",
+  height: "auto",
+  left: 0,
+  position: "absolute",
+  right: 0,
+  top: 0,
+  width: "auto",
+ }
