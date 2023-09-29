@@ -1,5 +1,8 @@
 import { Button, Flex, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { registerUser } from "../service/service";
+import { useSetAtom } from "jotai";
+import userAtom from "../store/userAtom";
 
 type SignupValues = {
   name: string;
@@ -13,10 +16,14 @@ const SignupForm = () => {
     formState: { errors },
     handleSubmit,
   } = useForm<SignupValues>();
+  const setUser = useSetAtom(userAtom);
 
-  const onSubmit: SubmitHandler<SignupValues> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<SignupValues> = async (data) => {
+    const { name, email, password } = data;
+    const user = await registerUser({ name, email, password });
+    setUser(user);
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex direction="column" gap="4">
