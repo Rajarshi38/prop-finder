@@ -16,7 +16,8 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import styled from "@emotion/styled";
 import { locations, propertyTypes } from "../constants";
 import { css } from "@emotion/react";
-import { fetchAllProperties } from "../service/service";
+import { useAtom } from "jotai";
+import { filterAtom } from "../store/propertyAtom";
 
 type PropertySearchValues = {
   location: string;
@@ -30,7 +31,7 @@ const capitalize = (word: string) => {
 };
 
 const PropertySearchForm = () => {
-  const { register, control, handleSubmit, watch } =
+  const { register, control, handleSubmit, watch, reset } =
     useForm<PropertySearchValues>({
       defaultValues: {
         priceRange: [0, 30],
@@ -38,6 +39,8 @@ const PropertySearchForm = () => {
         propertyType: "",
       },
     });
+
+  const [filters, setFilters] = useAtom(filterAtom);
 
   const priceRange = watch("priceRange");
   const startingPrice = priceRange[0] * 600;
@@ -64,11 +67,16 @@ const PropertySearchForm = () => {
     }
 
     const queryParams = Object.fromEntries(map);
-    await fetchAllProperties(queryParams);
+    setFilters(queryParams);
+  };
+
+  const handleReset = () => {
+    reset();
+    setFilters(null);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} onReset={handleReset}>
       <SimpleGrid
         columns={{
           base: 1,
@@ -145,6 +153,11 @@ const PropertySearchForm = () => {
         <Button type="submit" alignSelf={"flex-end"} colorScheme="teal">
           Apply
         </Button>
+        {filters && (
+          <Button type="reset" alignSelf="flex-end" colorScheme="blue">
+            Reset
+          </Button>
+        )}
       </SimpleGrid>
     </form>
   );

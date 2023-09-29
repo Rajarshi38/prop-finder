@@ -31,3 +31,11 @@ export interface User {
   name: string;
   email: string;
 }
+
+export interface FilterParams {
+  location: string;
+  type: PropertyType;
+  priceStart: number;
+  priceEnd: number;
+  availableDate: string;
+}

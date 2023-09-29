@@ -1,34 +1,34 @@
-import { SimpleGrid } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { fetchAllProperties } from "../service/service";
-import { Property } from "../interfaces";
+import { Center, SimpleGrid, Spinner } from "@chakra-ui/react";
 import PropertyCard from "./PropertyCard";
+import { useAtom } from "jotai";
+import { lodableProperties } from "../store/propertyAtom";
 
 const PropertyLists = () => {
-  const [properties, setAllProperties] = useState<Property[]>([]);
-
-  useEffect(() => {
-    (async () => {
-      const properties = await fetchAllProperties();
-      setAllProperties(properties);
-    })();
-  }, []);
-
+  const [response] = useAtom(lodableProperties);
+  if (response.state === "loading") {
+    return (
+      <Center>
+        <Spinner />
+      </Center>
+    );
+  }
   return (
-    <>
-      <SimpleGrid
-        columns={{
-          base: 1,
-          md: 2,
-          lg: 3,
-        }}
-        spacing={4}
-      >
-        {properties.map((property) => {
-          return <PropertyCard key={property._id} property={property} />;
-        })}
-      </SimpleGrid>
-    </>
+    response.state === "hasData" && (
+      <>
+        <SimpleGrid
+          columns={{
+            base: 1,
+            md: 2,
+            lg: 3,
+          }}
+          spacing={4}
+        >
+          {response.data.map((property) => {
+            return <PropertyCard key={property._id} property={property} />;
+          })}
+        </SimpleGrid>
+      </>
+    )
   );
 };
 

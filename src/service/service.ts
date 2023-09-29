@@ -1,17 +1,11 @@
 import { config } from "../config";
 import { routes } from "../constants/routes";
 import axios from "axios";
-import { PropertyType } from "../interfaces";
+import { FilterParams, Property } from "../interfaces";
 
 const baseUrl = config.api_url;
 
-export const fetchAllProperties = async (queryParams?: {
-  location: string;
-  type: PropertyType;
-  priceStart: number;
-  priceEnd: number;
-  availableDate: Date;
-}) => {
+export const fetchAllProperties = async (queryParams?: FilterParams) => {
   const url = new URL(baseUrl + routes.list_properties);
   if (queryParams) {
     if (queryParams.location) {
@@ -27,14 +21,11 @@ export const fetchAllProperties = async (queryParams?: {
       url.searchParams.set("priceEnd", queryParams.priceEnd.toString());
     }
     if (queryParams.availableDate) {
-      url.searchParams.set(
-        "availableDate",
-        queryParams.availableDate.toString()
-      );
+      url.searchParams.set("availableDate", queryParams.availableDate);
     }
   }
-  const response = await fetch(url).then((res) => res.json());
-  return response.payload.properties;
+  const response = await axios.get(url.toString()).then((res) => res.data);
+  return response.payload.properties as Property[];
 };
 
 export const loginUser = async (body: { email: string; password: string }) => {
